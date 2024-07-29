@@ -10,16 +10,22 @@ import com.bumptech.glide.Glide
 import com.example.movieapp.R
 import com.example.movieapp.data.remote.response.Movie
 
-class MovieListAdapter : RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
+class MovieListAdapter(private val loadMore: () -> Unit)
+    : RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
     private var posters = listOf<Movie>()
 
     class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val moviePoster: ImageView = view.findViewById(R.id.moviePoster)
         fun setData(post: Movie) {
-            Glide.with(moviePoster.context)
-                .load("https://image.tmdb.org/t/p/w500${post.posterPath}")
-                .placeholder(R.drawable.logo)
-                .into(moviePoster)
+            val posterPath = post.posterPath?.let { "https://image.tmdb.org/t/p/w500$it" }
+            if(posterPath != null) {
+                Glide.with(moviePoster.context)
+                    .load(posterPath)
+                    .placeholder(R.drawable.logo)
+                    .into(moviePoster)
+            } else {
+                moviePoster.setImageResource(R.drawable.logo)
+            }
         }
     }
 
@@ -32,6 +38,7 @@ class MovieListAdapter : RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>(
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.setData(posters[position])
+        if(position == posters.size - 4) loadMore()
     }
 
     @SuppressLint("NotifyDataSetChanged")
