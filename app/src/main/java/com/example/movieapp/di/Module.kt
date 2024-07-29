@@ -1,6 +1,7 @@
 package com.example.movieapp.di
 
 import com.example.movieapp.data.remote.ApiService
+import com.example.movieapp.data.repo.MoviesRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,6 +22,9 @@ object Module {
     fun providesOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder().build()
     }
+
+    @Provides
+    fun providesMoviesRepo(apiService: ApiService): MoviesRepo = MoviesRepo(apiService)
 
     @Provides
     fun providesRetrofitInstance(baseURL: String, okHttpClient: OkHttpClient): ApiService {
