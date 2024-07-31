@@ -1,18 +1,15 @@
 package com.example.movieapp.ui.moviedetails.viewmodel
 
 import Resource
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.movieapp.data.local.UserLikes
 import com.example.movieapp.data.remote.response.MovieDetails
 import com.example.movieapp.data.remote.response.Review
 import com.example.movieapp.data.remote.response.Trailer
 import com.example.movieapp.data.repo.MoviesRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     private val moviesRepo: MoviesRepo
-): ViewModel() {
+) : ViewModel() {
     private val _movieTrailers = MutableLiveData<Resource<List<Trailer>>>()
     val movieTrailer: LiveData<Resource<List<Trailer>>> get() = _movieTrailers
 
@@ -34,8 +31,6 @@ class MovieDetailsViewModel @Inject constructor(
         _movieTrailers.postValue(Resource.Loading())
         viewModelScope.launch {
             val response = moviesRepo.fetchMovieTrailers(movieId)
-            Log.d("Check","Response received in view ${response}")
-
             _movieTrailers.postValue(response)
         }
     }

@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieListViewModel @Inject constructor(
     private val moviesRepo: MoviesRepo
-): ViewModel() {
+) : ViewModel() {
     private val _moviePosters = MutableLiveData<Resource<List<Movie>>>()
     val moviePosters: LiveData<Resource<List<Movie>>> get() = _moviePosters
     private var currentPage: Int = 1
@@ -28,25 +28,25 @@ class MovieListViewModel @Inject constructor(
     }
 
     fun setSelectedCategory(category: String) {
-        if(category != selectedCategory.value) _selectedCategory.postValue(category)
+        if (category != selectedCategory.value) _selectedCategory.postValue(category)
     }
 
     fun fetchMovies(currPage: Int = 1) {
         currentPage = currPage
-        if(currentPage == 1) {
+        if (currentPage == 1) {
             _moviePosters.postValue(Resource.Loading())
         }
 
-        if(currentPage > totalPages) return
+        if (currentPage > totalPages) return
 
         viewModelScope.launch {
             val response = moviesRepo.fetchMovies(_selectedCategory.value ?: "popular", currentPage)
-            when(response) {
+            when (response) {
                 is Resource.Success -> {
                     val movieResponse = response.data
                     movieResponse?.let {
                         val moviesList = it.results ?: emptyList()
-                        if(currentPage == 1) {
+                        if (currentPage == 1) {
                             _moviePosters.postValue(Resource.Success(moviesList))
                         } else {
                             val loadedMovies =
@@ -56,13 +56,15 @@ class MovieListViewModel @Inject constructor(
                         totalPages = it.totalPages ?: 1
                     }
                 }
+
                 is Resource.Error -> {
-                    if(currentPage == 1) {
+                    if (currentPage == 1) {
                         _moviePosters.value = Resource.Error("API Call Failed")
                     }
                 }
+
                 else -> {
-                    if(currentPage == 1) {
+                    if (currentPage == 1) {
                         _moviePosters.postValue(Resource.Loading())
                     }
                 }
@@ -71,7 +73,7 @@ class MovieListViewModel @Inject constructor(
     }
 
     fun loadMore() {
-        if(!hasMorePages()) return
+        if (!hasMorePages()) return
         currentPage++
         fetchMovies(currentPage)
     }

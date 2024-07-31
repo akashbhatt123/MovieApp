@@ -3,7 +3,6 @@ package com.example.movieapp.ui.movielist
 import Resource
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +51,7 @@ class MovieListFragment : Fragment() {
         }
 
         movieListViewModel.moviePosters.observe(viewLifecycleOwner) { resource ->
-            when(resource) {
+            when (resource) {
                 is Resource.Loading -> {
                     progressBar.isVisible = true
                     recyclerView.isVisible = false
@@ -66,6 +65,7 @@ class MovieListFragment : Fragment() {
                         movieListAdapter.notifyDataSetChanged()
                     }
                 }
+
                 else -> {
                     progressBar.isVisible = false
                 }
@@ -82,11 +82,8 @@ class MovieListFragment : Fragment() {
     }
 
     private fun onMovieClicked(movieId: Int) {
-        Log.d("Check","movie id in list ${movieId}")
         val movieDetailsFragment = MovieDetailsFragment().apply {
             arguments = Bundle().apply {
-                Log.d("Check","movie id in list 1 :  ${movieId}")
-
                 putInt("movieId", movieId)
             }
         }

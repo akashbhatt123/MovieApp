@@ -1,7 +1,6 @@
 package com.example.movieapp.ui.moviedetails.adapter
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.R
 import com.example.movieapp.data.remote.response.Review
 
-class ReviewsAdapter: RecyclerView.Adapter<ReviewsAdapter.ReviewViewHolder>() {
+class ReviewsAdapter : RecyclerView.Adapter<ReviewsAdapter.ReviewViewHolder>() {
     private var reviews = listOf<Review>()
 
     class ReviewViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -22,7 +21,8 @@ class ReviewsAdapter: RecyclerView.Adapter<ReviewsAdapter.ReviewViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.review_list_items, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.review_list_items, parent, false)
         return ReviewViewHolder(view)
     }
 
@@ -34,7 +34,6 @@ class ReviewsAdapter: RecyclerView.Adapter<ReviewsAdapter.ReviewViewHolder>() {
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(data: List<Review>) {
-        Log.d("Check","Data in review Adapter ${data}")
         reviews = data
         notifyDataSetChanged()
     }

@@ -44,7 +44,8 @@ object Module {
     }
 
     @Provides
-    fun providesMoviesRepo(apiService: ApiService, userDao: UserDao): MoviesRepo = MoviesRepo(apiService, userDao)
+    fun providesMoviesRepo(apiService: ApiService, userDao: UserDao): MoviesRepo =
+        MoviesRepo(apiService, userDao)
 
     @Provides
     fun providesRetrofitInstance(baseURL: String, okHttpClient: OkHttpClient): ApiService {

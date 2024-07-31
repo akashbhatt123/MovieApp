@@ -10,15 +10,15 @@ import com.bumptech.glide.Glide
 import com.example.movieapp.R
 import com.example.movieapp.data.remote.response.Movie
 
-class MovieListAdapter(private val loadMore: () -> Unit, private val onMovieClick: (Int) -> Unit)
-    : RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
+class MovieListAdapter(private val loadMore: () -> Unit, private val onMovieClick: (Int) -> Unit) :
+    RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
     private var posters = listOf<Movie>()
 
     class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val moviePoster: ImageView = view.findViewById(R.id.moviePoster)
         fun setData(post: Movie, onMovieClick: (Int) -> Unit) {
             val posterPath = post.posterPath?.let { "https://image.tmdb.org/t/p/w500$it" }
-            if(posterPath != null) {
+            if (posterPath != null) {
                 Glide.with(moviePoster.context)
                     .load(posterPath)
                     .placeholder(R.drawable.logo)
@@ -32,7 +32,8 @@ class MovieListAdapter(private val loadMore: () -> Unit, private val onMovieClic
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.movie_list_items, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.movie_list_items, parent, false)
         return MovieViewHolder(view)
     }
 
@@ -40,7 +41,7 @@ class MovieListAdapter(private val loadMore: () -> Unit, private val onMovieClic
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.setData(posters[position], onMovieClick)
-        if(position == posters.size - 4) loadMore()
+        if (position == posters.size - 4) loadMore()
     }
 
     @SuppressLint("NotifyDataSetChanged")

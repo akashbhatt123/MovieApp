@@ -6,8 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(entities = [UserLikes::class], version = 2, exportSchema = false)
-abstract class UserDatabase: RoomDatabase() {
+abstract class UserDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+
     companion object {
         @Volatile
         private var INSTANCE: UserDatabase? = null
