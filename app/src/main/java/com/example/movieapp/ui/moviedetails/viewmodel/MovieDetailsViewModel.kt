@@ -30,7 +30,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val _movieDetails = MutableLiveData<Resource<MovieDetails>>()
     val movieDetails: LiveData<Resource<MovieDetails>> get() = _movieDetails
 
-    fun fetchTrailers(movieId: Int) {
+    private fun fetchTrailers(movieId: Int) {
         _movieTrailers.postValue(Resource.Loading())
         viewModelScope.launch {
             val response = moviesRepo.fetchMovieTrailers(movieId)
@@ -40,7 +40,7 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
-    fun fetchReviews(movieId: Int) {
+    private fun fetchReviews(movieId: Int) {
         _movieReviews.postValue(Resource.Loading())
         viewModelScope.launch {
             val response = moviesRepo.fetchMovieReviews(movieId)
@@ -48,7 +48,7 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
-    fun fetchDetails(movieId: Int) {
+    private fun fetchDetails(movieId: Int) {
         _movieDetails.postValue(Resource.Loading())
         viewModelScope.launch {
             val response = moviesRepo.fetchMovieDetails(movieId)
