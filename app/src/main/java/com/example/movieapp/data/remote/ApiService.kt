@@ -4,8 +4,6 @@ import com.example.movieapp.data.remote.response.MovieDetails
 import com.example.movieapp.data.remote.response.MovieReviews
 import com.example.movieapp.data.remote.response.MoviesData
 import com.example.movieapp.data.remote.response.MoviesTrailer
-import com.example.movieapp.data.remote.response.Review
-import com.example.movieapp.data.remote.response.Trailer
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

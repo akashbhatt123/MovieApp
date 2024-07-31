@@ -4,18 +4,15 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.example.movieapp.R
 import com.example.movieapp.ui.movielist.MovieListFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -36,33 +33,32 @@ class MainActivity : AppCompatActivity() {
                         setCategory(POPULAR)
                         true
                     }
+
                     R.id.action_top_rated -> {
                         setCategory(TOP_RATED)
                         true
                     }
+
                     else -> false
                 }
             }
         })
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             val movieListFragment = MovieListFragment()
-            loadFragment(movieListFragment)
             loadFragment(movieListFragment)
         }
     }
 
     fun setCategory(category: String) {
         supportFragmentManager.fragments.let { fragmentList ->
-            if(fragmentList.isNotEmpty() && fragmentList.get(fragmentList.size - 1) is MovieListFragment) {
-                (fragmentList.get(fragmentList.size - 1) as? MovieListFragment)?.let {
-                    it.setCategory(category)
-                }
+            if (fragmentList.isNotEmpty() && fragmentList[fragmentList.size - 1] is MovieListFragment) {
+                (fragmentList[fragmentList.size - 1] as? MovieListFragment)?.setCategory(category)
             }
         }
     }
 
-    fun loadFragment(fragment: Fragment) {
+    private fun loadFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_container, fragment)
@@ -73,5 +69,13 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val POPULAR = "popular"
         const val TOP_RATED = "top_rated"
+    }
+
+    fun hideToolBar() {
+        findViewById<View>(R.id.toolbar).visibility = View.GONE
+    }
+
+    fun showToolBar() {
+        findViewById<View>(R.id.toolbar).visibility = View.VISIBLE
     }
 }
