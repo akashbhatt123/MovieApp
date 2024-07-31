@@ -10,13 +10,13 @@ import com.bumptech.glide.Glide
 import com.example.movieapp.R
 import com.example.movieapp.data.remote.response.Movie
 
-class MovieListAdapter(private val loadMore: () -> Unit)
+class MovieListAdapter(private val loadMore: () -> Unit, private val onMovieClick: (Int) -> Unit)
     : RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
     private var posters = listOf<Movie>()
 
     class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val moviePoster: ImageView = view.findViewById(R.id.moviePoster)
-        fun setData(post: Movie) {
+        fun setData(post: Movie, onMovieClick: (Int) -> Unit) {
             val posterPath = post.posterPath?.let { "https://image.tmdb.org/t/p/w500$it" }
             if(posterPath != null) {
                 Glide.with(moviePoster.context)
@@ -26,6 +26,8 @@ class MovieListAdapter(private val loadMore: () -> Unit)
             } else {
                 moviePoster.setImageResource(R.drawable.logo)
             }
+
+            itemView.setOnClickListener { post.id?.let { it1 -> onMovieClick(it1) } }
         }
     }
 
@@ -37,7 +39,7 @@ class MovieListAdapter(private val loadMore: () -> Unit)
     override fun getItemCount(): Int = posters.size
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.setData(posters[position])
+        holder.setData(posters[position], onMovieClick)
         if(position == posters.size - 4) loadMore()
     }
 

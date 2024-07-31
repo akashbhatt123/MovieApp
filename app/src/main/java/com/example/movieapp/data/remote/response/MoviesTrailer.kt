@@ -7,7 +7,7 @@ data class MoviesTrailer(
     @SerializedName("id")
     val id: Int?,
     @SerializedName("results")
-    val results: List<Trailer?>?
+    val results: List<Trailer>?
 )
 
 data class Trailer(

@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.movieapp.data.remote.ApiService
 import com.example.movieapp.data.remote.response.Movie
 import com.example.movieapp.data.repo.MoviesRepo
 import com.example.movieapp.ui.MainActivity
@@ -41,7 +40,7 @@ class MovieListViewModel @Inject constructor(
         if(currentPage > totalPages) return
 
         viewModelScope.launch {
-            val response = moviesRepo.fetchPopularPosts(_selectedCategory.value ?: "popular", currentPage)
+            val response = moviesRepo.fetchMovies(_selectedCategory.value ?: "popular", currentPage)
             when(response) {
                 is Resource.Success -> {
                     val movieResponse = response.data
@@ -77,7 +76,7 @@ class MovieListViewModel @Inject constructor(
         fetchMovies(currentPage)
     }
 
-    fun hasMorePages(): Boolean {
+    private fun hasMorePages(): Boolean {
         return currentPage <= totalPages
     }
 }

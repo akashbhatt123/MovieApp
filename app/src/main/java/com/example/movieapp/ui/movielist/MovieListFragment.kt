@@ -1,7 +1,9 @@
 package com.example.movieapp.ui.movielist
 
 import Resource
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.R
+import com.example.movieapp.ui.moviedetails.MovieDetailsFragment
 import com.example.movieapp.ui.movielist.adapter.MovieListAdapter
 import com.example.movieapp.ui.movielist.viewmodel.MovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,14 +32,20 @@ class MovieListFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_movie_list, container, false)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView: RecyclerView = view.findViewById(R.id.movieListRecyclerView)
         val progressBar: ProgressBar = view.findViewById(R.id.progressBar)
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        movieListAdapter = MovieListAdapter {
-            movieListViewModel.loadMore()
-        }
+        movieListAdapter = MovieListAdapter(
+            onMovieClick = { movieId ->
+                onMovieClicked(movieId)
+            },
+            loadMore = {
+                movieListViewModel.loadMore()
+            }
+        )
         recyclerView.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = movieListAdapter
@@ -63,12 +72,28 @@ class MovieListFragment : Fragment() {
             }
         }
 
-        movieListViewModel.selectedCategory.observe(viewLifecycleOwner) { category ->
+        movieListViewModel.selectedCategory.observe(viewLifecycleOwner) {
             movieListViewModel.fetchMovies()
         }
     }
 
     fun setCategory(category: String) {
         movieListViewModel.setSelectedCategory(category)
+    }
+
+    private fun onMovieClicked(movieId: Int) {
+        Log.d("Check","movie id in list ${movieId}")
+        val movieDetailsFragment = MovieDetailsFragment().apply {
+            arguments = Bundle().apply {
+                Log.d("Check","movie id in list 1 :  ${movieId}")
+
+                putInt("movieId", movieId)
+            }
+        }
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, movieDetailsFragment)
+            .addToBackStack(null)
+            .commit()
     }
 }
